@@ -48,7 +48,9 @@ SUMMARY_PROMPT = PromptTemplate(
     input_variables=["summary", "new_lines"], template=_DEFAULT_SUMMARIZER_TEMPLATE
 )
 
-_DEFAULT_ENTITY_EXTRACTION_TEMPLATE = """You are an AI assistant reading the transcript of a conversation between an AI and a human. Extract all of the proper nouns from the last line of conversation. As a guideline, a proper noun is generally capitalized. You should definitely extract all names and places.
+_DEFAULT_ENTITY_EXTRACTION_TEMPLATE = """You are an AI assistant reading the transcript of a conversation between an AI and a human. 
+
+From the last line of conversation, extract all nouns and in addition to key conversational themes which may include, but are not limited to people, places, events, likes, dislikes, future plans, relations and concepts in their life which would be helpful in understanding them.
 
 The conversation history is provided just in case of a coreference (e.g. "What do you know about him" where "him" is defined in a previous line) -- ignore items mentioned there that are not in the last line.
 
@@ -86,10 +88,9 @@ ENTITY_EXTRACTION_PROMPT = PromptTemplate(
     input_variables=["history", "input"], template=_DEFAULT_ENTITY_EXTRACTION_TEMPLATE
 )
 
-_DEFAULT_ENTITY_SUMMARIZATION_TEMPLATE = """You are an AI assistant helping a human keep track of facts about relevant people, places, and concepts in their life. Update the summary of the provided entity in the "Entity" section based on the last line of your conversation with the human. If you are writing the summary for the first time, return a single sentence.
-The update should only include facts that are relayed in the last line of conversation about the provided entity, and should only contain facts about the provided entity.
-
-If there is no new information about the provided entity or the information is not worth noting (not an important or relevant fact to remember long-term), return the existing summary unchanged.
+_DEFAULT_ENTITY_SUMMARIZATION_TEMPLATE = """You are an AI assistant helping a human keep track of important parts of their life. Update the summary of the provided entity in the "Entity" section based on the last line of your conversation with the human, you should refernece the human by name. If you are writing the summary for the first time, return a single sentence.
+If there is already an existing summary of an enitity you should decide if the information is about the same or different topic. If there is nothing new to add to the summary, return the existing summary unchanged. When updating an existing summary, the summary should be updated, summerising both the existing and new summary, 
+Where possible you should attibute the summary to a new noun, as opposed to constantly updating the existing ones. 
 
 Full conversation history (for context):
 {history}
@@ -102,7 +103,7 @@ Existing summary of {entity}:
 
 Last line of conversation:
 Human: {input}
-Updated summary:"""
+Updated summary: """
 
 ENTITY_SUMMARIZATION_PROMPT = PromptTemplate(
     input_variables=["entity", "summary", "history", "input"],

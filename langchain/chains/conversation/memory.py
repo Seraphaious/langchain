@@ -10,6 +10,9 @@ from langchain.memory.entity import ConversationEntityMemory
 from langchain.memory.kg import ConversationKGMemory
 from langchain.memory.summary import ConversationSummaryMemory
 from langchain.memory.summary_buffer import ConversationSummaryBufferMemory
+from langchain.memory.entity_cache import ConversationEntityCache
+
+
 
 # This is only for backwards compatibility.
 
@@ -22,4 +25,5 @@ __all__ = [
     "ConversationBufferMemory",
     "CombinedMemory",
     "ConversationStringBufferMemory",
+    "ConversationEntityCache",
 ]
