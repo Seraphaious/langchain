@@ -37,15 +37,6 @@ import threading
 
 
 
-current_working_directory = Path.cwd()
-env_path = current_working_directory / ".env"
-load_dotenv(dotenv_path=env_path)
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-pinecone_api_key = os.getenv("PINECONE_API_KEY")
-pinecone_environment = os.getenv("PINECONE_ENVIRONMENT")
-
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -76,16 +67,19 @@ class BaseEntityStore(ABC):
         pass
 
 
+
+
 class PineconeEntityStore(BaseEntityStore):
     def __init__(
         self,
-        api_key: str = pinecone_api_key,
-        environment: str = pinecone_environment,
+        openai_api_key: Optional[str] = None,
+        api_key: Optional[str] = None,
+        environment: Optional[str] = None,
         index_name: str = "test-index",
-        namespace: Optional[str] = None,  # Make the namespace parameter optional
-        embeddings: OpenAIEmbeddings = OpenAIEmbeddings(),
-        usrNumber: Optional[str] = None,  # Add this argument
-        redis_client: Optional[redis.StrictRedis] = None,  # Add this argument
+        namespace: Optional[str] = None,
+        embeddings: OpenAIEmbeddings = None,  # Change this to None
+        usrNumber: Optional[str] = None,
+        redis_client: Optional[redis.StrictRedis] = None,
         *args: Any,
         **kwargs: Any,
     ):
@@ -93,7 +87,7 @@ class PineconeEntityStore(BaseEntityStore):
 
         pinecone.init(api_key=api_key, environment=environment)
         self.index = pinecone.Index(index_name=index_name)
-        self.embeddings = embeddings
+        self.embeddings = embeddings or OpenAIEmbeddings(openai_api_key=openai_api_key)  # Pass the API key here
         self.namespace = namespace
 
         if usrNumber is not None and redis_client is not None:
