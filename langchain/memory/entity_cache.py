@@ -37,7 +37,8 @@ import threading
 
 
 
-env_path = Path("/Users/jacob/Documents/Artificial Inteligence/Projects/Alice/main/") / ".env"
+current_working_directory = Path.cwd()
+env_path = current_working_directory / ".env"
 load_dotenv(dotenv_path=env_path)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
