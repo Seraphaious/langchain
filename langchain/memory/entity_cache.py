@@ -106,7 +106,7 @@ class PineconeEntityStore(BaseEntityStore):
         # Retrieve from Pinecone and cache if not found in Redis
         query_embedding = self.embeddings.embed_query(key)
         query_response = self.index.query(
-            top_k=1,
+            top_k=5,
             include_values=True,
             include_metadata=True,
             vector=query_embedding,
@@ -199,6 +199,9 @@ class ConversationEntityCache(BaseChatMemory):
 
     human_prefix: Optional[str] = None
     ai_prefix: Optional[str] = None
+    openai_api_key: Optional[str] = None
+    api_key: Optional[str] = None
+    environment: Optional[str] = None
     llm: BaseLanguageModel
     entity_extraction_prompt: BasePromptTemplate = ENTITY_EXTRACTION_PROMPT
     entity_summarization_prompt: BasePromptTemplate = ENTITY_SUMMARIZATION_PROMPT
